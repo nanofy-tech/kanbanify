@@ -1,0 +1,25 @@
+version: "3"
+services:
+  server:
+    container_name: server
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on: 
+      - db
+    volumes:
+      - .:/server
+    env_file:
+      - .env
+  db:
+    image: postgres:13
+    container_name: db
+    ports:
+      - 2345:5432
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+volumes:
+  postgres:

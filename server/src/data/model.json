@@ -1,0 +1,58 @@
+{
+  "_id": "5f0b5a1b9b3a3e1b1c3b3b3b",
+  "userId": 1,
+  "name": "Board 1",
+  "url": "auhfd7832h892nfi",
+  "background": "https://images.unsplash.com/photo-1594396457412-5b4b9d6e8b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+  "content": {
+    "tasks": {
+      "task-1": {
+        "id": "task-1",
+        "title": "Take out the garbage",
+        "description": "Take out the garbage",
+        "coverURL": "https://images.unsplash.com/photo-1594396457412-5b4b9d6e8b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
+        "checklistsIds": ["checklist-1"]
+      }
+    },
+    "columns": {
+      "column-1": {
+        "id": "column-1",
+        "title": "To do",
+        "taskIds": ["task-1"]
+      }
+    },
+    "checklists": {
+      "checklist-1": {
+        "id": "checklist-1",
+        "title": "Checklist 1",
+        "itemIds": ["item-1", "item-2", "item-3"]
+      }
+    },
+    "items": {
+      "item-1": {
+        "id": "item-1",
+        "title": "Item 1",
+        "checked": false
+      },
+      "item-2": {
+        "id": "item-2",
+        "title": "Item 2",
+        "checked": false
+      },
+      "item-3": {
+        "id": "item-3",
+        "title": "Item 3",
+        "checked": false
+      }
+    },
+    "columnOrder": ["column-1"]
+  },
+  "members": {
+    "member-1": {
+      "id": "member-1",
+      "name": "Member 1",
+      "hasPermission": false,
+      "avatarURL": "https://images.unsplash.com/photo-1594396457412-5b4b9d6e8b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+    }
+  }
+}

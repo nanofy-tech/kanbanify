@@ -1,0 +1,27 @@
+{
+  "columns": {
+    "Coluna-1": {
+      "title": "Em Progresso",
+      "columnId": "uuid()",
+      "items": [
+        {
+          "id": "uuid()",
+          "title": "Scroll automatico das colunas e página",
+          "description": "Ao arrastar um card ou coluna para uma área que necessite do scroll, o scroll deve ser automático",
+          "user": {
+            "id": "uuid() - POSTGRES",
+            "name": "Vinicius",
+            "photo": "vinicius.jpg"
+          }
+        }
+      ]
+    }
+  },
+  "users": [
+    {
+      "id": "uuid() - POSTGRES",
+      "name": "Vinicius",
+      "photo": "vinicius.jpg"
+    }
+  ]
+}
