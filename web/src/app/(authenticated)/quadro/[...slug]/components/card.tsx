@@ -4,7 +4,8 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import invariant from 'tiny-invariant'
 import { MdAdd } from 'react-icons/md'
-import { Ellipsis } from 'lucide-react'
+import { Ellipsis, Trash } from 'lucide-react'
+import { toast } from 'sonner'
 
 import {
   type Edge,
@@ -23,10 +24,12 @@ import { Select } from '@/components/ui/select'
 import { Dialog } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { Dropdown } from '@/components/ui/dropdown'
 
 import { Item } from '../data/task'
 import { useCtx } from '../page'
 import { useUpdateCard } from '../../hooks/use-update-card'
+import { useDeleteCard } from '../../hooks/use-delete-card'
 
 type DraggableState = 'idle' | 'generate-preview' | 'dragging'
 
@@ -43,6 +46,7 @@ export const Card = memo(function Card({
 
   const ref = useRef<HTMLDivElement | null>(null)
 
+  const { mutate: handleDeleteCard } = useDeleteCard()
   const { mutate: handleUpdateCard } = useUpdateCard()
 
   const { handleSubmit, register, setValue, watch } = useForm<{
@@ -50,6 +54,7 @@ export const Card = memo(function Card({
   }>()
 
   const [showDialog, setShowDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [state, setState] = useState<DraggableState>('idle')
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null)
 
@@ -92,6 +97,44 @@ export const Card = memo(function Card({
           })
 
           setShowDialog(false)
+        },
+      },
+    )
+  }
+
+  const onDeleteCard = () => {
+    handleDeleteCard(
+      {
+        itemId,
+        boardId,
+        columnId,
+      },
+      {
+        onSuccess: async () => {
+          setData((prev) => {
+            return {
+              ...prev,
+              columnMap: {
+                ...prev.columnMap,
+                [columnId]: {
+                  ...prev.columnMap[columnId],
+                  items: prev.columnMap[columnId].items.filter(
+                    (item) => item.itemId !== itemId,
+                  ),
+                },
+              },
+            }
+          })
+
+          setShowDeleteDialog(false)
+
+          toast('Sucesso!', {
+            description: 'Cartão excluído com sucesso!',
+            action: {
+              label: 'Fechar',
+              onClick: () => {},
+            },
+          })
         },
       },
     )
@@ -198,9 +241,19 @@ export const Card = memo(function Card({
           <Dialog.Header className="flex-row items-center justify-between space-y-0">
             <Dialog.Title>{title}</Dialog.Title>
 
-            <Button size="icon" variant="ghost">
-              <Ellipsis />
-            </Button>
+            <Dropdown.Root>
+              <Dropdown.Trigger>
+                <Button size="icon" variant="ghost">
+                  <Ellipsis />
+                </Button>
+              </Dropdown.Trigger>
+              <Dropdown.Content className="w-64" side="right">
+                <Dropdown.Item onClick={() => setShowDeleteDialog(true)}>
+                  <Trash className="mr-1 size-4" />
+                  Excluir
+                </Dropdown.Item>
+              </Dropdown.Content>
+            </Dropdown.Root>
           </Dialog.Header>
 
           <div className="relative text-sm text-neutral-400">
@@ -239,6 +292,38 @@ export const Card = memo(function Card({
               </Badge>
             </div>
           )}
+        </Dialog.Content>
+      </Dialog.Root>
+
+      <Dialog.Root open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>
+              Excluir cartão{' '}
+              <span className="rounded-md border bg-muted px-1 text-sm">
+                {title}
+              </span>{' '}
+            </Dialog.Title>
+            <Dialog.Description>
+              Tem certeza que deseja excluir o cartão?
+            </Dialog.Description>
+          </Dialog.Header>
+          <Dialog.Footer>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setShowDeleteDialog(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => onDeleteCard()}
+            >
+              Excluir
+            </Button>
+          </Dialog.Footer>
         </Dialog.Content>
       </Dialog.Root>
 

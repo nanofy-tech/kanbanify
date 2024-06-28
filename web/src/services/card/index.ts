@@ -1,6 +1,6 @@
 import axios from '@/libs/axios'
 
-import type { UpdateCardData } from './types'
+import type { UpdateCardData, DeleteCardData } from './types'
 
 export const card = {
   async update({ boardId, columnId, data }: UpdateCardData) {
@@ -10,5 +10,13 @@ export const card = {
     )
 
     return updatedCard
+  },
+
+  async delete({ boardId, columnId, itemId }: DeleteCardData) {
+    const { data: deletedCard } = await axios.delete(
+      `/tasks/${boardId}/${columnId}/${itemId}`,
+    )
+
+    return deletedCard
   },
 }

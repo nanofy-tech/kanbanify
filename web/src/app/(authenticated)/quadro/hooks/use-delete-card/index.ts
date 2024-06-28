@@ -1,11 +1,11 @@
 import { createMutation } from 'react-query-kit'
 
-import { board } from '@/services/boards'
+import { card } from '@/services/card'
 
-export const useDeleteColumn = () => {
+export const useDeleteCard = () => {
   const mutation = createMutation({
-    mutationFn: board.deleteColumn,
-    mutationKey: ['delete-column'],
+    mutationFn: card.delete,
+    mutationKey: ['delete-card'],
     onError: (error) => {
       console.log(error)
     },

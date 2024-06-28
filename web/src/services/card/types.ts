@@ -15,3 +15,9 @@ export type UpdateCardData = {
   columnId: string
   data: Partial<Card>
 }
+
+export type DeleteCardData = {
+  itemId: string
+  boardId: string
+  columnId: string
+}
