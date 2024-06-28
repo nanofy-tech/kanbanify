@@ -13,5 +13,6 @@ taskRouter
   .put('/order/:boardURL', taskController.updateOrder)
   .put('/column/:boardURL', taskController.updateTaskColumn)
   .put('/:boardId/:columnId', taskController.updateCard)
+  .delete('/:boardId/:columnId/:itemId', taskController.deleteCard)
 
 export default taskRouter

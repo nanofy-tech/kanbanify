@@ -45,19 +45,6 @@ export type UpdateTaskImageParams = {
   coverURL: string
 }
 
-function createTask({ columnId, boardURL, ...taskData }: CreateTaskParams) {
-  return boardCollection.updateOne(
-    { url: boardURL },
-    {
-      $push: {
-        [`content.columnMap.${columnId}.items`]: {
-          ...taskData,
-        },
-      },
-    },
-  )
-}
-
 function update(data, columnId: string, boardId: string) {
   return boardCollection.updateOne(
     {
@@ -67,6 +54,36 @@ function update(data, columnId: string, boardId: string) {
     {
       $set: {
         [`content.columnMap.${columnId}.items.$`]: data,
+      },
+    },
+  )
+}
+
+export type DeleteCardData = {
+  itemId: string
+  boardId: string
+  columnId: string
+}
+
+function destroy({ columnId, boardId, itemId }: DeleteCardData) {
+  return boardCollection.updateOne(
+    { url: boardId },
+    {
+      $pull: {
+        [`content.columnMap.${columnId}.items`]: { itemId },
+      },
+    },
+  )
+}
+
+function createTask({ columnId, boardURL, ...taskData }: CreateTaskParams) {
+  return boardCollection.updateOne(
+    { url: boardURL },
+    {
+      $push: {
+        [`content.columnMap.${columnId}.items`]: {
+          ...taskData,
+        },
       },
     },
   )
@@ -142,6 +159,7 @@ function upsertDescription({
 
 export default {
   update,
+  destroy,
 
   createTask,
   updateTitle,

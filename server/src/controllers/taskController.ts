@@ -20,6 +20,23 @@ async function updateCard(req: Request, res: Response) {
   }
 }
 
+async function deleteCard(req: Request, res: Response) {
+  try {
+    const { userId } = res.locals
+    const { itemId, boardId, columnId } = req.params
+
+    await taskService.deleteCard(userId, { itemId, boardId, columnId })
+
+    return res.sendStatus(204)
+  } catch (error) {
+    if (error.status && error.message) {
+      return res.status(error.status).send(error.message)
+    }
+
+    return res.status(500).send('Internal server error')
+  }
+}
+
 async function createTask(req: Request, res: Response) {
   try {
     const { body } = req
@@ -134,6 +151,7 @@ async function upsertDescription(req: Request, res: Response) {
 
 export default {
   updateCard,
+  deleteCard,
 
   createTask,
   updateTitle,

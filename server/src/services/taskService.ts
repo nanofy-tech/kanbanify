@@ -4,6 +4,7 @@ import taskRepository, {
   UpdateTaskOrderParams,
   UpdateTaskColumnParams,
   UpsertDescriptionParams,
+  DeleteCardData,
 } from '@/repositories/taskRepository'
 import columnService from './columnService'
 
@@ -18,6 +19,17 @@ async function updateCard(
   await columnService.validateUserHasPermissionOrFail(userId, boardId)
 
   await taskRepository.update(data, columnId, boardId)
+}
+
+async function deleteCard(
+  userId: string,
+  { itemId, boardId, columnId }: DeleteCardData,
+) {
+  await columnService.validateBoardExistsOrFail(boardId)
+
+  await columnService.validateUserHasPermissionOrFail(userId, boardId)
+
+  await taskRepository.destroy({ itemId, boardId, columnId })
 }
 
 async function createTask(body: CreateTaskParams, userId: string) {
@@ -87,6 +99,7 @@ async function upsertDescription(
 
 export default {
   updateCard,
+  deleteCard,
 
   createTask,
   updateTitle,
